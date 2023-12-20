@@ -1,17 +1,21 @@
-interface IBaseBlock {
-  id: string
+export enum BlockType {
+  Text = 'Text',
+  Image = 'Image',
 }
 
-interface ITextBlock extends IBaseBlock {
+interface IBaseBlock {
+  id: string
+  type: BlockType
+}
+
+export interface ITextBlock extends IBaseBlock {
+  type: BlockType.Text
   text: string
 }
 
-interface IImageBlock extends IBaseBlock {
+export interface IImageBlock extends IBaseBlock {
+  type: BlockType.Image
   url: string
 }
 
-interface ILinkBlock extends IBaseBlock {
-  url: string
-}
-
-export type Block = ITextBlock | IImageBlock | ILinkBlock
+export type Block = ITextBlock | IImageBlock
