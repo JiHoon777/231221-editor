@@ -18,4 +18,4 @@ export const Editor = observer(() => {
   )
 })
 
-const CONTAINER_CLASS_NAME = 'flex flex-col p-10 w-[70%]'
+const CONTAINER_CLASS_NAME = 'flex flex-col p-10 grow'
