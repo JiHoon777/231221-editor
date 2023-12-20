@@ -1,13 +1,13 @@
 import { EditorNavBar } from '../component/EditorNavBar'
 import { Editor } from '../component/Editor'
-import { DetailEditSidebar } from '../component/DetailEditSidebar'
+import { DetailSideEditor } from '../component/DetailSideEditor'
 
 export function EditorContainer() {
   return (
     <div className="flex w-screen h-screen overflow-hidden">
       <EditorNavBar />
       <Editor />
-      <DetailEditSidebar />
+      <DetailSideEditor />
     </div>
   )
 }
