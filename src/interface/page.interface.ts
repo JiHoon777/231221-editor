@@ -1,6 +1,7 @@
 import { Block } from './block.interface'
 
-export interface PageScript {
+export interface IPage {
+  id: string
   title: string
   blocks: Block[]
 }

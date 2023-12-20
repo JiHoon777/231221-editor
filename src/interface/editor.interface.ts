@@ -1,5 +1,5 @@
-import { PageScript } from './page.interface'
+import { IPage } from './page.interface'
 
-export interface EditorScript {
-  pages: PageScript[]
+export interface IEditor {
+  pages: IPage[]
 }

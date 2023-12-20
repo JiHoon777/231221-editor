@@ -1,23 +1,27 @@
 import {
   EditorChangeActionType,
   EditorChangeOp,
-  EditorChangeOpConsumer,
-  EditorChangeOpResult,
+  IEditorChangeOpConsumer,
+  IEditorChangeOpResult,
   EditorChangeOpTarget,
   EditorChangeOpWithReverse,
 } from '../interface/op.interface'
 import { computed, makeObservable, observable, runInAction } from 'mobx'
+import { PageStore } from './page.store'
 
-export class EditorStore implements EditorChangeOpConsumer {
+export class EditorStore implements IEditorChangeOpConsumer {
+  pageStore: PageStore
+
   // 최초 로드이후 쌓인 변경점들
   private opStack: EditorChangeOpWithReverse[] = []
-
   private redoOpStack: EditorChangeOpWithReverse[] = []
 
   // 한 번에 하나의 변경점만 적용할 수 있도록 하기 위하여 현재 적용 중인 op 를 갖고 있는다.
   onApplying: EditorChangeOp | null = null
 
   constructor() {
+    this.pageStore = new PageStore(this)
+
     makeObservable(this, {
       onApplying: observable,
 
@@ -70,7 +74,7 @@ export class EditorStore implements EditorChangeOpConsumer {
     })
   }
 
-  applyChangeOp(op: EditorChangeOp): EditorChangeOpResult | null {
+  applyChangeOp(op: EditorChangeOp): IEditorChangeOpResult | null {
     if (op.target !== EditorChangeOpTarget.Root) {
       return null
     }
@@ -112,7 +116,7 @@ export class EditorStore implements EditorChangeOpConsumer {
       }
       case EditorChangeOpTarget.Page:
       case EditorChangeOpTarget.Block: {
-        return {} as EditorChangeOpResult
+        return {} as IEditorChangeOpResult
       }
       default: {
         return null

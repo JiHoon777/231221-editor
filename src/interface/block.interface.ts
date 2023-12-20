@@ -1,17 +1,17 @@
-interface BaseBlock {
+interface IBaseBlock {
   id: string
 }
 
-interface TextBlock extends BaseBlock {
+interface ITextBlock extends IBaseBlock {
   text: string
 }
 
-interface ImageBlock extends BaseBlock {
+interface IImageBlock extends IBaseBlock {
   url: string
 }
 
-interface LinkBlock extends BaseBlock {
+interface ILinkBlock extends IBaseBlock {
   url: string
 }
 
-export type Block = TextBlock | ImageBlock | LinkBlock
+export type Block = ITextBlock | IImageBlock | ILinkBlock

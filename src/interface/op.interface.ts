@@ -17,50 +17,50 @@ export enum EditorChangeOpTarget {
   Block = 'Block',
 }
 
-interface BaseEditorChangeOp {
+interface IBaseEditorChangeOp {
   opType: EditorChangeOpType
   target: EditorChangeOpTarget
 }
 
-interface BaseEditorPageChangeOp extends BaseEditorChangeOp {
+interface IBaseEditorPageChangeOp extends IBaseEditorChangeOp {
   target: EditorChangeOpTarget.Page
   pageUniqueId: string
 }
 
-interface BaseEditorBlockChangeOp extends BaseEditorChangeOp {
+interface IBaseEditorBlockChangeOp extends IBaseEditorChangeOp {
   target: EditorChangeOpTarget.Block
   pageUniqueId: string
   blockUniqueId: string
 }
 
-export interface EditorAddBlock extends BaseEditorPageChangeOp {
+export interface IEditorAddBlock extends IBaseEditorPageChangeOp {
   opType: EditorChangeOpType.AddBlock
   indexToAdd: number
   blockToAdd: Block
 }
 
-export interface EditorRemoveBlock extends BaseEditorPageChangeOp {
+export interface IEditorRemoveBlock extends IBaseEditorPageChangeOp {
   opType: EditorChangeOpType.RemoveBlock
   blockToRemove: Block
 }
 
 export type EditorChangeOp =
-  | EditorAddBlock
-  | EditorRemoveBlock
-  | BaseEditorChangeOp
-  | BaseEditorPageChangeOp
-  | BaseEditorBlockChangeOp
+  | IEditorAddBlock
+  | IEditorRemoveBlock
+  | IBaseEditorChangeOp
+  | IBaseEditorPageChangeOp
+  | IBaseEditorBlockChangeOp
 
-export interface EditorChangeOpResult {
+export interface IEditorChangeOpResult {
   reverse: EditorChangeOp
 }
 
-export interface EditorChangeOpConsumer {
+export interface IEditorChangeOpConsumer {
   // 변경점을 적용하며, 성공적으로 적용하면 해당 Op 를 Undo 할 때의 op 를 반환
   applyChangeOp(
     op: EditorChangeOp,
     type: EditorChangeActionType
-  ): EditorChangeOpResult | null
+  ): IEditorChangeOpResult | null
 }
 
 /**
@@ -68,5 +68,5 @@ export interface EditorChangeOpConsumer {
  * 따라서 undo 를 통해 액션을 제거할 때는 이 액션을 수행하면서 스택에서 제거하면 된다.
  */
 export type EditorChangeOpWithReverse = EditorChangeOp & {
-  reverseOp: EditorChangeOpResult
+  reverseOp: IEditorChangeOpResult
 }
