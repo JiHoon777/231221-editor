@@ -9,6 +9,7 @@ import {
 } from '../interface/op.interface'
 import { computed, makeObservable, observable, runInAction } from 'mobx'
 import { PageStore } from './page.store'
+import { DOPage } from './DOPage'
 
 export class EditorStore implements IEditorChangeOpConsumer {
   pageStore: PageStore
@@ -20,11 +21,15 @@ export class EditorStore implements IEditorChangeOpConsumer {
   // 한 번에 하나의 변경점만 적용할 수 있도록 하기 위하여 현재 적용 중인 op 를 갖고 있는다.
   onApplying: EditorChangeOp | null = null
 
+  // 수정중인 페이지
+  editingPage: DOPage | null = null
+
   constructor() {
     this.pageStore = new PageStore(this)
 
     makeObservable(this, {
       onApplying: observable,
+      editingPage: observable,
 
       isApplyingChange: computed,
     })
@@ -32,6 +37,12 @@ export class EditorStore implements IEditorChangeOpConsumer {
 
   get isApplyingChange() {
     return !!this.onApplying
+  }
+
+  startEditPage(page: DOPage) {
+    runInAction(() => {
+      this.editingPage = page
+    })
   }
 
   applyChangeOnEditor(
@@ -131,6 +142,7 @@ export class EditorStore implements IEditorChangeOpConsumer {
     op: EditorChangeOp,
     type: EditorChangeActionType
   ) {
+    console.log(134, type)
     switch (op.target) {
       case EditorChangeOpTarget.Root: {
         return this.applyChangeOp(op)

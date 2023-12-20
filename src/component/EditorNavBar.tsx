@@ -23,8 +23,8 @@ export const EditorNavBar = observer(() => {
   }
 
   return (
-    <nav className="inline-flex flex-col w-[240px] h-full border-r border-gray-400 p-4">
-      <div className="flex ">
+    <nav className="flex flex-col w-[240px] h-full border-r border-gray-400 p-4">
+      <div className="flex mb-10">
         <button onClick={handleAddPage}>Add Page</button>
         <button className="ml-auto" onClick={() => editor.undo()}>
           Undo
@@ -34,7 +34,11 @@ export const EditorNavBar = observer(() => {
         </button>
       </div>
       <For each={editor.pageStore.list}>
-        {page => <div key={page.id}>{page.title}</div>}
+        {page => (
+          <div key={page.id} onClick={() => editor.startEditPage(page)}>
+            {page.title}
+          </div>
+        )}
       </For>
     </nav>
   )

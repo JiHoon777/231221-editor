@@ -3,7 +3,7 @@ import { Editor } from '../component/Editor'
 
 export function EditorContainer() {
   return (
-    <div className="w-screen h-screen overflow-hidden">
+    <div className="flex w-screen h-screen overflow-hidden">
       <EditorNavBar />
       <Editor />
     </div>
