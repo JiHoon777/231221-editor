@@ -1,6 +1,6 @@
 import { PageStore } from './page.store'
 import { IPage } from '../interface/page.interface'
-import { action, makeObservable } from 'mobx'
+import { action, makeObservable, observable, runInAction } from 'mobx'
 import { assignIf } from './store.utils'
 import { DOBlockType } from './block/DOB.interface'
 import { BlockType } from '../interface/block.interface'
@@ -14,6 +14,9 @@ export class DOPage {
   title: string = 'Empty Page'
   blocks: DOBlockType[] = []
 
+  // 현재 선택된 블록, 없다면 null
+  editingBlock: DOBlockType | null = null
+
   constructor(store: PageStore, data: Partial<IPage> & Pick<IPage, 'id'>) {
     this.store = store
 
@@ -22,6 +25,13 @@ export class DOPage {
 
     makeObservable(this, {
       merge: action,
+      editingBlock: observable,
+    })
+  }
+
+  startEditBlock(block: DOBlockType | null) {
+    runInAction(() => {
+      this.editingBlock = block
     })
   }
 
