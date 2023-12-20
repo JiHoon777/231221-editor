@@ -1,6 +1,6 @@
 import { IPage } from '../interface/page.interface'
 import { EditorStore } from './editor.store'
-import { action, makeObservable, observable } from 'mobx'
+import { action, makeObservable, observable, runInAction } from 'mobx'
 import { DOPage } from './DOPage'
 
 export class PageStore {
@@ -20,6 +20,16 @@ export class PageStore {
 
   getById(id: string) {
     return this.data.get(id)
+  }
+
+  removeById(id: string) {
+    const pageRemoved = this.data.get(id)
+
+    runInAction(() => {
+      this.data.delete(id)
+    })
+
+    return pageRemoved
   }
 
   merge(data: Partial<IPage> & Pick<IPage, 'id'>) {

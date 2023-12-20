@@ -1,10 +1,11 @@
 import {
   EditorChangeActionType,
   EditorChangeOp,
+  EditorChangeOpTarget,
+  EditorChangeOpType,
+  EditorChangeOpWithReverse,
   IEditorChangeOpConsumer,
   IEditorChangeOpResult,
-  EditorChangeOpTarget,
-  EditorChangeOpWithReverse,
 } from '../interface/op.interface'
 import { computed, makeObservable, observable, runInAction } from 'mobx'
 import { PageStore } from './page.store'
@@ -80,6 +81,26 @@ export class EditorStore implements IEditorChangeOpConsumer {
     }
 
     switch (op.opType) {
+      case EditorChangeOpType.AddPage: {
+        this.pageStore.merge(op.pageToAdd)
+        return {
+          reverse: {
+            opType: EditorChangeOpType.RemovePage,
+            target: EditorChangeOpTarget.Root,
+            pageToRemove: op.pageToAdd,
+          },
+        }
+      }
+      case EditorChangeOpType.RemovePage: {
+        this.pageStore.removeById(op.pageToRemove.id)
+        return {
+          reverse: {
+            opType: EditorChangeOpType.AddPage,
+            target: EditorChangeOpTarget.Root,
+            pageToAdd: op.pageToRemove,
+          },
+        }
+      }
       default: {
         return null
       }

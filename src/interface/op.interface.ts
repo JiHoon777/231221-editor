@@ -7,7 +7,7 @@ export enum EditorChangeActionType {
   Redo = 'Redo',
 }
 
-enum EditorChangeOpType {
+export enum EditorChangeOpType {
   // Root
   AddPage = 'AddPage',
   RemovePage = 'RemovePage',
@@ -69,11 +69,7 @@ export type EditorChangeOp =
   // Page
   | IEditorAddBlock
   | IEditorRemoveBlock
-  // Block
-  // Todo: Remove
-  | IBaseEditorChangeOp
-  | IBaseEditorPageChangeOp
-  | IBaseEditorBlockChangeOp
+// Block
 
 export interface IEditorChangeOpResult {
   reverse: EditorChangeOp
