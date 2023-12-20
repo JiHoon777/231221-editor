@@ -1,4 +1,5 @@
 import { Block } from './block.interface'
+import { IPage } from './page.interface'
 
 export enum EditorChangeActionType {
   Normal = 'Normal',
@@ -7,8 +8,15 @@ export enum EditorChangeActionType {
 }
 
 enum EditorChangeOpType {
+  // Root
+  AddPage = 'AddPage',
+  RemovePage = 'RemovePage',
+
+  // Page
   AddBlock = 'AddBlock',
   RemoveBlock = 'RemoveBlock',
+
+  // Block
 }
 
 export enum EditorChangeOpTarget {
@@ -33,6 +41,16 @@ interface IBaseEditorBlockChangeOp extends IBaseEditorChangeOp {
   blockUniqueId: string
 }
 
+export interface IEditorAddPage extends IBaseEditorChangeOp {
+  opType: EditorChangeOpType.AddPage
+  pageToAdd: IPage
+}
+
+export interface IEditorRemovePage extends IBaseEditorChangeOp {
+  opType: EditorChangeOpType.RemovePage
+  pageToRemove: IPage
+}
+
 export interface IEditorAddBlock extends IBaseEditorPageChangeOp {
   opType: EditorChangeOpType.AddBlock
   indexToAdd: number
@@ -45,8 +63,14 @@ export interface IEditorRemoveBlock extends IBaseEditorPageChangeOp {
 }
 
 export type EditorChangeOp =
+  // Root
+  | IEditorAddPage
+  | IEditorRemovePage
+  // Page
   | IEditorAddBlock
   | IEditorRemoveBlock
+  // Block
+  // Todo: Remove
   | IBaseEditorChangeOp
   | IBaseEditorPageChangeOp
   | IBaseEditorBlockChangeOp
