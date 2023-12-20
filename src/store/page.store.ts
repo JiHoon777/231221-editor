@@ -1,6 +1,6 @@
 import { IPage } from '../interface/page.interface'
 import { EditorStore } from './editor.store'
-import { action, makeObservable, observable, runInAction } from 'mobx'
+import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 import { DOPage } from './DOPage'
 
 export class PageStore {
@@ -15,7 +15,13 @@ export class PageStore {
       data: observable,
 
       merge: action,
+
+      list: computed,
     })
+  }
+
+  get list() {
+    return [...this.data.values()]
   }
 
   getById(id: string) {

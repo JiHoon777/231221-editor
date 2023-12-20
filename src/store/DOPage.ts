@@ -10,12 +10,14 @@ import { DOBImage } from './block/DOBImage'
 export class DOPage {
   store: PageStore
 
+  id: string
   title: string = 'Empty Page'
   blocks: DOBlockType[] = []
 
-  constructor(store: PageStore, data: Partial<IPage>) {
+  constructor(store: PageStore, data: Partial<IPage> & Pick<IPage, 'id'>) {
     this.store = store
 
+    this.id = data.id
     this.merge(data)
 
     makeObservable(this, {
