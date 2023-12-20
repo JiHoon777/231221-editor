@@ -26,7 +26,6 @@ export const EditorNavBar = observer(() => {
     <nav className="inline-flex flex-col w-[240px] h-full border-r border-gray-400 p-4">
       <div className="flex ">
         <button onClick={handleAddPage}>Add Page</button>
-
         <button className="ml-auto" onClick={() => editor.undo()}>
           Undo
         </button>
