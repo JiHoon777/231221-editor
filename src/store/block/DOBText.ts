@@ -1,8 +1,9 @@
 import { DOBBase } from './DOBBase'
-import { ITextBlock } from '../../interface/block.interface'
+import { BlockType, ITextBlock } from '../../interface/block.interface'
 import { DOPage } from '../DOPage'
 
 export class DOBText extends DOBBase {
+  blockType = BlockType.Text
   text: string = ''
 
   constructor(data: ITextBlock, page: DOPage) {

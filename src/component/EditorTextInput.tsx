@@ -1,7 +1,7 @@
-import { TextInput, TextInputProps } from '../base/TextInput'
+import { TextInput, TextInputProps } from './base/TextInput'
 import { useEffect, useState } from 'react'
 
-export const DetailSideEditorTextInput = ({
+export const EditorTextInput = ({
   realValue,
   onSubmit,
   ...props

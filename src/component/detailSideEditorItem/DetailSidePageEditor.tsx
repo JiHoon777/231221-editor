@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite'
 import { useEditorStore } from '../../store/configureEditorStore'
 import { LabelWithInput } from '../base/LabelWithInput'
 import { Label } from '../base/Label'
-import { DetailSideEditorTextInput } from './DetailSideEditorTextInput'
+import { EditorTextInput } from '../EditorTextInput'
 
 export const DetailSidePageEditor = observer(() => {
   const editor = useEditorStore()
@@ -12,7 +12,7 @@ export const DetailSidePageEditor = observer(() => {
       <LabelWithInput
         label={<Label>Title</Label>}
         input={
-          <DetailSideEditorTextInput
+          <EditorTextInput
             realValue={editor.editingPage?.title ?? ''}
             onSubmit={text => editor.editingPage?.changeTitle(text)}
           />
