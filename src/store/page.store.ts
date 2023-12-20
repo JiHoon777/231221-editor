@@ -2,6 +2,11 @@ import { IPage } from '../interface/page.interface'
 import { EditorStore } from './editor.store'
 import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 import { DOPage } from './DOPage'
+import {
+  EditorChangeOpTarget,
+  EditorChangeOpType,
+} from '../interface/op.interface'
+import { generateUuid } from './store.utils'
 
 export class PageStore {
   editorStore: EditorStore
@@ -22,6 +27,18 @@ export class PageStore {
 
   get list() {
     return [...this.data.values()]
+  }
+
+  addEmptyPage() {
+    this.editorStore.applyChangeOnEditor({
+      opType: EditorChangeOpType.AddPage,
+      target: EditorChangeOpTarget.Root,
+      pageToAdd: {
+        id: generateUuid(),
+        title: 'Untitled',
+        blocks: [],
+      },
+    })
   }
 
   getById(id: string) {

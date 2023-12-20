@@ -1,31 +1,16 @@
 import { observer } from 'mobx-react-lite'
 import { useEditorStore } from '../store/configureEditorStore'
-import {
-  EditorChangeOpTarget,
-  EditorChangeOpType,
-} from '../interface/op.interface'
-import { generateUuid } from '../store/store.utils'
 import { For } from './base/For'
 
 export const EditorNavBar = observer(() => {
   const editor = useEditorStore()
 
-  const handleAddPage = () => {
-    editor.applyChangeOnEditor({
-      opType: EditorChangeOpType.AddPage,
-      target: EditorChangeOpTarget.Root,
-      pageToAdd: {
-        id: generateUuid(),
-        title: 'Untitled',
-        blocks: [],
-      },
-    })
-  }
-
   return (
     <nav className="flex flex-col w-[240px] h-full border-r border-gray-400 p-4">
       <div className="flex mb-10">
-        <button onClick={handleAddPage}>Add Page</button>
+        <button onClick={() => editor.pageStore.addEmptyPage()}>
+          Add Page
+        </button>
         <button className="ml-auto" onClick={() => editor.undo()}>
           Undo
         </button>

@@ -6,9 +6,7 @@ export const Editor = observer(() => {
 
   if (!editor.editingPage) {
     return (
-      <div className="w-full h-full inline-flex flex-col p-10">
-        Page 를 선택해주세요.
-      </div>
+      <div className="flex flex-col p-10 w-[70%]">Page 를 선택해주세요.</div>
     )
   }
 
