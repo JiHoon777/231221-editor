@@ -1,6 +1,5 @@
-import { Block } from './block.interface'
+import { PageScript } from './page.interface'
 
-export interface EditorData {
-  title: string
-  blocks: Block[]
+export interface EditorScript {
+  pages: PageScript[]
 }
