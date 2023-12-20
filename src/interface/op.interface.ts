@@ -15,8 +15,10 @@ export enum EditorChangeOpType {
   // Page
   AddBlock = 'AddBlock',
   RemoveBlock = 'RemoveBlock',
+  ChangePageTitle = 'ChangePageTitle',
 
   // Block
+  ChangeTextBlockText = 'ChangeTextBlockText',
 }
 
 export enum EditorChangeOpTarget {
@@ -30,6 +32,10 @@ interface IBaseEditorChangeOp {
   target: EditorChangeOpTarget
 }
 
+interface IBaseEditorRootChangeOp extends IBaseEditorChangeOp {
+  target: EditorChangeOpTarget.Root
+}
+
 interface IBaseEditorPageChangeOp extends IBaseEditorChangeOp {
   target: EditorChangeOpTarget.Page
   pageUniqueId: string
@@ -41,16 +47,18 @@ interface IBaseEditorBlockChangeOp extends IBaseEditorChangeOp {
   blockUniqueId: string
 }
 
-export interface IEditorAddPage extends IBaseEditorChangeOp {
+// Root
+export interface IEditorAddPage extends IBaseEditorRootChangeOp {
   opType: EditorChangeOpType.AddPage
   pageToAdd: IPage
 }
 
-export interface IEditorRemovePage extends IBaseEditorChangeOp {
+export interface IEditorRemovePage extends IBaseEditorRootChangeOp {
   opType: EditorChangeOpType.RemovePage
   pageToRemove: IPage
 }
 
+// Page
 export interface IEditorAddBlock extends IBaseEditorPageChangeOp {
   opType: EditorChangeOpType.AddBlock
   indexToAdd: number
@@ -62,6 +70,18 @@ export interface IEditorRemoveBlock extends IBaseEditorPageChangeOp {
   blockToRemove: Block
 }
 
+export interface IEditorChangePageTitle extends IBaseEditorPageChangeOp {
+  opType: EditorChangeOpType.ChangePageTitle
+  title: string
+}
+
+// Block
+
+export interface IEditorChangeTextBlockText extends IBaseEditorBlockChangeOp {
+  opType: EditorChangeOpType.ChangeTextBlockText
+  text: string
+}
+
 export type EditorChangeOp =
   // Root
   | IEditorAddPage
@@ -69,7 +89,9 @@ export type EditorChangeOp =
   // Page
   | IEditorAddBlock
   | IEditorRemoveBlock
-// Block
+  | IEditorChangePageTitle
+  // Block
+  | IEditorChangeTextBlockText
 
 export interface IEditorChangeOpResult {
   reverse: EditorChangeOp

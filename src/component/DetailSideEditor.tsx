@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { useEditorStore } from '../store/configureEditorStore'
+import { DetailSideEditorRenderer } from './detailSideEditorItem/DetailSideEditorRenderer'
 
 export const DetailSideEditor = observer(() => {
   const editor = useEditorStore()
@@ -9,6 +10,8 @@ export const DetailSideEditor = observer(() => {
   }
 
   return (
-    <div className="w-[390px] flex flex-col border-l border-gray-600 gap-4"></div>
+    <div className="w-[390px] h-full flex flex-col border-l border-gray-600 gap-4 p-6">
+      <DetailSideEditorRenderer />
+    </div>
   )
 })

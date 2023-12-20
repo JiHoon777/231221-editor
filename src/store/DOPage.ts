@@ -5,9 +5,16 @@ import { assignIf } from './store.utils'
 import { DOBlockType } from './block/DOB.interface'
 import { BlockType } from '../interface/block.interface'
 import { DOBText } from './block/DOBText'
-import { DOBImage } from './block/DOBImage'
+import {
+  EditorChangeActionType,
+  EditorChangeOp,
+  EditorChangeOpTarget,
+  EditorChangeOpType,
+  IEditorChangeOpConsumer,
+  IEditorChangeOpResult,
+} from '../interface/op.interface'
 
-export class DOPage {
+export class DOPage implements IEditorChangeOpConsumer {
   store: PageStore
 
   id: string
@@ -24,8 +31,10 @@ export class DOPage {
     this.merge(data)
 
     makeObservable(this, {
-      merge: action,
       editingBlock: observable,
+      title: observable,
+
+      merge: action,
     })
   }
 
@@ -35,6 +44,41 @@ export class DOPage {
     })
   }
 
+  changeTitle(title: string) {
+    this.store.editorStore.applyChangeOnEditor({
+      opType: EditorChangeOpType.ChangePageTitle,
+      target: EditorChangeOpTarget.Page,
+      pageUniqueId: this.id,
+      title,
+    })
+  }
+
+  applyChangeOp(
+    op: EditorChangeOp,
+    type: EditorChangeActionType
+  ): IEditorChangeOpResult | null {
+    if (op.target === EditorChangeOpTarget.Page) {
+      switch (op.opType) {
+        case EditorChangeOpType.ChangePageTitle: {
+          const titleTemp = this.title
+          runInAction(() => {
+            this.title = op.title
+          })
+          return {
+            reverse: {
+              opType: EditorChangeOpType.ChangePageTitle,
+              target: EditorChangeOpTarget.Page,
+              title: titleTemp,
+              pageUniqueId: this.id,
+            },
+          }
+        }
+      }
+    }
+
+    return null
+  }
+
   merge(data: Partial<IPage>) {
     assignIf(data, 'title', v => (this.title = v))
     assignIf(data, 'blocks', v => {
@@ -42,9 +86,6 @@ export class DOPage {
         switch (block.type) {
           case BlockType.Text: {
             return new DOBText(block, this)
-          }
-          case BlockType.Image: {
-            return new DOBImage(block, this)
           }
         }
       })

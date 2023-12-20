@@ -142,14 +142,19 @@ export class EditorStore implements IEditorChangeOpConsumer {
     op: EditorChangeOp,
     type: EditorChangeActionType
   ) {
-    console.log(134, type)
     switch (op.target) {
       case EditorChangeOpTarget.Root: {
         return this.applyChangeOp(op)
       }
       case EditorChangeOpTarget.Page:
       case EditorChangeOpTarget.Block: {
-        return {} as IEditorChangeOpResult
+        const pageFound = this.pageStore.getById(op.pageUniqueId)
+
+        if (!pageFound) {
+          return null
+        }
+
+        return pageFound.applyChangeOp(op, type)
       }
       default: {
         return null

@@ -1,6 +1,5 @@
 export enum BlockType {
   Text = 'Text',
-  Image = 'Image',
 }
 
 interface IBaseBlock {
@@ -13,9 +12,4 @@ export interface ITextBlock extends IBaseBlock {
   text: string
 }
 
-export interface IImageBlock extends IBaseBlock {
-  type: BlockType.Image
-  url: string
-}
-
-export type Block = ITextBlock | IImageBlock
+export type Block = ITextBlock
