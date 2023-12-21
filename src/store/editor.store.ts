@@ -58,7 +58,7 @@ export class EditorStore implements IEditorChangeOpConsumer {
       this.onApplying = op
     })
 
-    const reverseOp = this.applyChaneOpInternal(op, type)
+    const reverseOp = this.applyChaneOpInternal(op)
 
     if (reverseOp) {
       switch (type) {
@@ -145,10 +145,7 @@ export class EditorStore implements IEditorChangeOpConsumer {
     this.applyChangeOnEditor(op.reverseOp.reverse, EditorChangeActionType.Redo)
   }
 
-  private applyChaneOpInternal(
-    op: EditorChangeOp,
-    type: EditorChangeActionType
-  ) {
+  private applyChaneOpInternal(op: EditorChangeOp) {
     switch (op.target) {
       case EditorChangeOpTarget.Root: {
         return this.applyChangeOp(op)
@@ -161,7 +158,7 @@ export class EditorStore implements IEditorChangeOpConsumer {
           return null
         }
 
-        return pageFound.applyChangeOp(op, type)
+        return pageFound.applyChangeOp(op)
       }
       default: {
         return null
