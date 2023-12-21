@@ -5,6 +5,7 @@ import { For } from './base/For'
 export const EditorNavBar = observer(() => {
   const editor = useEditorStore()
 
+  const pageList = editor.pageStore.list
   return (
     <nav className="flex flex-col w-[240px] h-full border-r border-gray-400 p-4">
       <div className="flex mb-10">
@@ -18,7 +19,7 @@ export const EditorNavBar = observer(() => {
           Redo
         </button>
       </div>
-      <For each={editor.pageStore.list}>
+      <For each={pageList}>
         {page => (
           <div key={page.id} onClick={() => editor.startEditPage(page)}>
             {page.title}
