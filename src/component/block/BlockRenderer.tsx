@@ -10,7 +10,7 @@ export const BlockRenderer = observer(() => {
     editor.editingPage?.blocks?.map(block => {
       switch (block.blockType) {
         case BlockType.Text: {
-          return <TextBlock block={block} />
+          return <TextBlock key={block.id} block={block} />
         }
         default: {
           return `${block.blockType} 구현해주세요. 개발자님!`

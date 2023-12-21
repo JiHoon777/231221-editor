@@ -1,9 +1,9 @@
 import { PageStore } from './page.store'
 import { IPage } from '../interface/page.interface'
 import { action, makeObservable, observable, runInAction } from 'mobx'
-import { assignIf } from './store.utils'
+import { assignIf, generateUuid } from './store.utils'
 import { DOBlockType } from './block/DOB.interface'
-import { BlockType } from '../interface/block.interface'
+import { BlockType, ITextBlock } from '../interface/block.interface'
 import { DOBText } from './block/DOBText'
 import {
   EditorChangeActionType,
@@ -33,6 +33,7 @@ export class DOPage implements IEditorChangeOpConsumer {
     makeObservable(this, {
       editingBlock: observable,
       title: observable,
+      blocks: observable,
 
       merge: action,
     })
@@ -53,6 +54,29 @@ export class DOPage implements IEditorChangeOpConsumer {
     })
   }
 
+  addTextBlock(text: string) {
+    this.store.editorStore.applyChangeOnEditor({
+      opType: EditorChangeOpType.AddBlock,
+      target: EditorChangeOpTarget.Page,
+      pageUniqueId: this.id,
+      blockToAdd: {
+        id: generateUuid(),
+        type: BlockType.Text,
+        text,
+      },
+      indexToAdd: this.blocks.length,
+    })
+  }
+
+  removeTextBlock(blockToRemove: ITextBlock) {
+    this.store.editorStore.applyChangeOnEditor({
+      opType: EditorChangeOpType.RemoveBlock,
+      target: EditorChangeOpTarget.Page,
+      pageUniqueId: this.id,
+      blockToRemove,
+    })
+  }
+
   applyChangeOp(
     op: EditorChangeOp,
     type: EditorChangeActionType
@@ -69,6 +93,47 @@ export class DOPage implements IEditorChangeOpConsumer {
               opType: EditorChangeOpType.ChangePageTitle,
               target: EditorChangeOpTarget.Page,
               title: titleTemp,
+              pageUniqueId: this.id,
+            },
+          }
+        }
+        case EditorChangeOpType.AddBlock: {
+          runInAction(() => {
+            this.blocks.splice(
+              op.indexToAdd,
+              0,
+              new DOBText(op.blockToAdd, this)
+            )
+          })
+
+          return {
+            reverse: {
+              opType: EditorChangeOpType.RemoveBlock,
+              target: EditorChangeOpTarget.Page,
+              blockToRemove: op.blockToAdd,
+              pageUniqueId: this.id,
+            },
+          }
+        }
+        case EditorChangeOpType.RemoveBlock: {
+          const blockIndexFound = this.blocks.findIndex(
+            block => block.id === op.blockToRemove.id
+          )
+
+          if (blockIndexFound < 0) {
+            return null
+          }
+
+          runInAction(() => {
+            this.blocks.splice(blockIndexFound, 1)
+          })
+
+          return {
+            reverse: {
+              opType: EditorChangeOpType.AddBlock,
+              target: EditorChangeOpTarget.Page,
+              blockToAdd: op.blockToRemove,
+              indexToAdd: blockIndexFound,
               pageUniqueId: this.id,
             },
           }

@@ -3,7 +3,7 @@ import { makeObservable, observable } from 'mobx'
 import { Block, BlockType } from '../../interface/block.interface'
 
 export abstract class DOBBase {
-  blockType: BlockType
+  abstract blockType: BlockType
   page: DOPage
 
   __data: Block
@@ -12,11 +12,9 @@ export abstract class DOBBase {
     this.page = page
 
     this.__data = data
-    this.blockType = data.type
 
     makeObservable(this, {
       page: observable,
-      blockType: observable,
       __data: observable,
     })
   }
