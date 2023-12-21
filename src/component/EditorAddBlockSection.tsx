@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import { useEditorStore } from '../store/configureEditorStore'
 
-export const EditorAddBlock = observer(() => {
+export const EditorAddBlockSection = observer(() => {
   const editor = useEditorStore()
 
   return (

@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import { useEditorStore } from '../store/configureEditorStore'
 import { BlockRenderer } from './block/BlockRenderer'
-import { EditorAddBlock } from './EditorAddBlock'
+import { EditorAddBlockSection } from './EditorAddBlockSection'
 
 export const Editor = observer(() => {
   const editor = useEditorStore()
@@ -18,7 +18,7 @@ export const Editor = observer(() => {
       <h1 className="text-4xl mb-4">page title: {editor.editingPage.title}</h1>
       <section className="w-full flex flex-col gap-4">
         <BlockRenderer />
-        <EditorAddBlock />
+        <EditorAddBlockSection />
       </section>
     </div>
   )
