@@ -9,6 +9,7 @@ export const DetailSidePageEditor = observer(() => {
 
   return (
     <div className="w-full">
+      <Label>Edit Page</Label>
       <LabelWithInput
         label={<Label>Title</Label>}
         input={

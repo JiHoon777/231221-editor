@@ -104,6 +104,13 @@ export class EditorStore implements IEditorChangeOpConsumer {
       }
       case EditorChangeOpType.RemovePage: {
         this.pageStore.removeById(op.pageToRemove.id)
+
+        if (this.editingPage?.id === op.pageToRemove.id) {
+          runInAction(() => {
+            this.editingPage = null
+          })
+        }
+
         return {
           reverse: {
             opType: EditorChangeOpType.AddPage,
