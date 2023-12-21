@@ -6,7 +6,6 @@ import { DOBlockType } from './block/DOB.interface'
 import { BlockType, ITextBlock } from '../interface/block.interface'
 import { DOBText } from './block/DOBText'
 import {
-  EditorChangeActionType,
   EditorChangeOp,
   EditorChangeOpTarget,
   EditorChangeOpType,
@@ -21,9 +20,6 @@ export class DOPage implements IEditorChangeOpConsumer {
   title: string = 'Empty Page'
   blocks: DOBlockType[] = []
 
-  // 현재 선택된 블록, 없다면 null
-  editingBlock: DOBlockType | null = null
-
   constructor(store: PageStore, data: Partial<IPage> & Pick<IPage, 'id'>) {
     this.store = store
 
@@ -31,17 +27,10 @@ export class DOPage implements IEditorChangeOpConsumer {
     this.merge(data)
 
     makeObservable(this, {
-      editingBlock: observable,
       title: observable,
       blocks: observable,
 
       merge: action,
-    })
-  }
-
-  startEditBlock(block: DOBlockType | null) {
-    runInAction(() => {
-      this.editingBlock = block
     })
   }
 
@@ -77,10 +66,19 @@ export class DOPage implements IEditorChangeOpConsumer {
     })
   }
 
-  applyChangeOp(
-    op: EditorChangeOp,
-    type: EditorChangeActionType
-  ): IEditorChangeOpResult | null {
+  applyChangeOp(op: EditorChangeOp): IEditorChangeOpResult | null {
+    if (op.target === EditorChangeOpTarget.Block) {
+      const blockFound = this.blocks.find(
+        block => block.id === op.blockUniqueId
+      )
+
+      if (!blockFound) {
+        return null
+      }
+
+      return blockFound.applyChangeOp(op)
+    }
+
     if (op.target === EditorChangeOpTarget.Page) {
       switch (op.opType) {
         case EditorChangeOpType.ChangePageTitle: {

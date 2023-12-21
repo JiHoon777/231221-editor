@@ -5,7 +5,10 @@ import { EditorTextInput } from '../EditorTextInput'
 export const TextBlock = observer(({ block }: { block: DOBText }) => {
   return (
     <div className="flex w-full h-12">
-      <EditorTextInput realValue={block.text} onSubmit={() => {}} />
+      <EditorTextInput
+        realValue={block.text}
+        onSubmit={text => block.changeText(text)}
+      />
     </div>
   )
 })
